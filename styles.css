@@ -39,8 +39,12 @@ object {
     background: rgba(255, 255, 255, 0.8);
     padding: 10px;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+/* ボタンの共通スタイル */
 button {
     padding: 10px 15px;
     font-size: 16px;
@@ -68,7 +72,7 @@ input[type="password"] {
     color: black;
 }
 
-/* 「PDFを直接開く」リンクの位置を調整 */
+/* 📌 「PDFを直接開く」リンクの位置を調整 */
 .pdf-link {
     position: absolute;
     bottom: 50px;
@@ -82,13 +86,9 @@ input[type="password"] {
     color: #007bff;
 }
 
-/* 「暗号を見る」ボタンの位置調整 */
+/* 📌 「暗号を見る」ボタンを「次へ」の右側に配置 */
 .hint-container {
-    position: absolute;
-    /* PC用 */
-    bottom: 130px; 
-    width: 100%;
-    text-align: center;
+    margin-left: 10px; /* 「次へ」ボタンとの間隔 */
 }
 
 .hint-container button {
@@ -107,7 +107,7 @@ input[type="password"] {
     font-weight: bold;
 }
 
-/* ▼ スマホ表示時の調整 ▼ */
+/* 📱 スマホ表示時の調整 */
 @media screen and (max-width: 768px) {
     #viewer {
         height: 75vh; /* スマホでは少し小さめに */
@@ -134,8 +134,8 @@ input[type="password"] {
         width: 80px;
     }
 
-    /* スマホで「暗号を見る」ボタンが被らないように余裕を持たせる */
+    /* 📌 スマホでも「暗号を見る」ボタンを「次へ」の右側に配置 */
     .hint-container {
-        bottom: 200px;
+        margin-left: 5px; /* スマホで狭くなりすぎないように調整 */
     }
 }
