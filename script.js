@@ -1,49 +1,76 @@
-const steps = [
-    "https://1drv.ms/p/c/1e3d202cd0e487f0/IQTQkfElicyXQ4ES72tn4XftAVA7nxG1QBCZ3JGx0YxWv8k?em=2&wdAr=1.7777777777777777",
-    "https://1drv.ms/p/c/1e3d202cd0e487f0/IQSw30ayuY2FSb60J2Ctn0mjAaKQsuiA4i7DPqIHiAOthdk?em=2&wdAr=1.7777777777777777",
-    "https://1drv.ms/p/c/1e3d202cd0e487f0/IQQlQabZ3dAOTaEcsh9esvceAXuJqzLu6PI7Em4f3_dK6bg?em=2&wdAr=1.7777777777777777",
-    "https://1drv.ms/p/c/1e3d202cd0e487f0/IQRgaQCBfl0oQbmG7fdEA6CRAVlAlXOpHOObAKoQskRgsKk?em=2&wdAr=1.7777777777777777",
-    "https://1drv.ms/p/c/1e3d202cd0e487f0/IQTzSUjONz79T4DVROJfNqM-ARpx_RABMY4xD7nad2wZVHM?em=2&wdAr=1.7777777777777777",
-    "https://1drv.ms/p/c/1e3d202cd0e487f0/IQQ8Os6IvGyjQIRiohNF2dN8AaYlbBVYKp5ExVR9jjOVV5Y?em=2&wdAr=1.7777777777777777"
-];
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
-const passwords = [
-    "annpann",
-    "sanndoitti",
-    "siopann",
-    "kurowassann",
-    "meronnpann"
-];
+public class PdfNavigation extends JFrame {
+    private String[] pdfFiles = {
+        "コンサル.pdf",
+        "ステップ1-1.pdf",
+        "ステップ1-2.pdf",
+        "ステップ1-3.pdf",
+        "ステップ1-4.pdf",
+        "ステップ1-5.pdf",
+        "ステップ1-6.pdf",
+        "ステップ1-7.pdf"
+    };
+    private int currentIndex = 0;
+    
+    private JLabel label; // PDFファイル名を表示するラベル(本格的なPDF表示には別ライブラリが必要)
 
-let currentStep = 0;
+    public PdfNavigation() {
+        super("PDF Navigation Sample");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(400, 200);
 
-const iframe = document.getElementById("step-content");
-const prevButton = document.getElementById("prev");
-const nextButton = document.getElementById("next");
-const passwordInput = document.getElementById("password");
+        // メインパネル
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
 
-function updateStep() {
-    iframe.src = steps[currentStep];
-    prevButton.disabled = currentStep === 0;
-    passwordInput.value = "";
+        // 表示用ラベル
+        label = new JLabel("現在のPDF: " + pdfFiles[currentIndex], SwingConstants.CENTER);
+        panel.add(label, BorderLayout.CENTER);
+
+        // ボタンパネル
+        JPanel buttonPanel = new JPanel();
+        
+        JButton nextButton = new JButton("次へ");
+        JButton codeButton = new JButton("暗号表示");
+
+        nextButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentIndex++;
+                if (currentIndex >= pdfFiles.length) {
+                    currentIndex = 0; // 最後まで行ったら先頭に戻す例
+                }
+                label.setText("現在のPDF: " + pdfFiles[currentIndex]);
+                // 実際にPDFを開くなら、Desktop.getDesktop().open(new File(pdfFiles[currentIndex])) など
+            }
+        });
+
+        codeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // 暗号情報を表示
+                String message =
+                    "ステップ2 → ADMJ → ステップ3で入力\n" +
+                    "ステップ4 → OSOI → ステップ5で入力\n" +
+                    "ステップ5 → CAFUNE → ステップ6で入力\n";
+                JOptionPane.showMessageDialog(null, message, "暗号一覧", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        buttonPanel.add(nextButton);
+        buttonPanel.add(codeButton);
+
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+
+        getContentPane().add(panel);
+        setLocationRelativeTo(null); // 画面中央に配置
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new PdfNavigation());
+    }
 }
-
-prevButton.addEventListener("click", () => {
-    if (currentStep > 0) {
-        currentStep--;
-        updateStep();
-    }
-});
-
-nextButton.addEventListener("click", () => {
-    if (passwordInput.value === passwords[currentStep]) {
-        if (currentStep < steps.length - 1) {
-            currentStep++;
-            updateStep();
-        }
-    } else {
-        alert("パスワードが正しくありません！");
-    }
-});
-
-updateStep();
