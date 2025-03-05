@@ -1,76 +1,96 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+const pdfFiles = [
+   "ステップ1-1.pdf",
+    "ステップ1-2.pdf",
+    "ステップ1-3.pdf",
+     "ステップ1-4.pdf",
+     "ステップ1-5.pdf",
+     "ステップ1-6.pdf",
+     "ステップ1-7.pdf"
+];
 
-public class PdfNavigation extends JFrame {
-    private String[] pdfFiles = {
-        "コンサル.pdf",
-        "ステップ1-1.pdf",
-        "ステップ1-2.pdf",
-        "ステップ1-3.pdf",
-        "ステップ1-4.pdf",
-        "ステップ1-5.pdf",
-        "ステップ1-6.pdf",
-        "ステップ1-7.pdf"
-    };
-    private int currentIndex = 0;
-    
-    private JLabel label; // PDFファイル名を表示するラベル(本格的なPDF表示には別ライブラリが必要)
+const passwords = {
+   "ステップ1-3.pdf": "ADMJ",
+    "ステップ1-5.pdf": "OSOI",
+     "ステップ1-6.pdf": "CAFUNE"
+};
 
-    public PdfNavigation() {
-        super("PDF Navigation Sample");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 200);
+const hints = {
+    "ステップ1-2.pdf": "ADMJ",
+    "ステップ2-2.pdf": "OSOI",
+    "ステップ1-2.pdf": "CAFUNE"
+};
 
-        // メインパネル
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
+let currentIndex = 0;
 
-        // 表示用ラベル
-        label = new JLabel("現在のPDF: " + pdfFiles[currentIndex], SwingConstants.CENTER);
-        panel.add(label, BorderLayout.CENTER);
+function updateViewer() {
+    const pdfObject = document.getElementById("pdfObject");
+    const pdfLink = document.getElementById("pdfLink");
+    const pdfTitle = document.getElementById("pdfTitle");
+    const hintContainer = document.getElementById("hintContainer");
+    const hintText = document.getElementById("hintText");
+    const hintBtn = document.getElementById("hintBtn");
 
-        // ボタンパネル
-        JPanel buttonPanel = new JPanel();
-        
-        JButton nextButton = new JButton("次へ");
-        JButton codeButton = new JButton("暗号表示");
+    pdfObject.data = pdfFiles[currentIndex];
+    pdfLink.href = pdfFiles[currentIndex];
+    pdfTitle.textContent = "現在のファイル: " + pdfFiles[currentIndex];
 
-        nextButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                currentIndex++;
-                if (currentIndex >= pdfFiles.length) {
-                    currentIndex = 0; // 最後まで行ったら先頭に戻す例
-                }
-                label.setText("現在のPDF: " + pdfFiles[currentIndex]);
-                // 実際にPDFを開くなら、Desktop.getDesktop().open(new File(pdfFiles[currentIndex])) など
-            }
-        });
+    const passwordInput = document.getElementById("passwordInput");
+    const nextBtn = document.getElementById("nextBtn");
 
-        codeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // 暗号情報を表示
-                String message =
-                    "ステップ2 → ADMJ → ステップ3で入力\n" +
-                    "ステップ4 → OSOI → ステップ5で入力\n" +
-                    "ステップ5 → CAFUNE → ステップ6で入力\n";
-                JOptionPane.showMessageDialog(null, message, "暗号一覧", JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
-
-        buttonPanel.add(nextButton);
-        buttonPanel.add(codeButton);
-
-        panel.add(buttonPanel, BorderLayout.SOUTH);
-
-        getContentPane().add(panel);
-        setLocationRelativeTo(null); // 画面中央に配置
-        setVisible(true);
+    // 暗号ボタンの表示設定
+    if (hints[pdfFiles[currentIndex]]) {
+        hintContainer.style.display = "block";
+        hintText.textContent = "";
+        hintBtn.onclick = function () {
+            hintText.textContent = hints[pdfFiles[currentIndex]];
+        };
+    } else {
+        hintContainer.style.display = "none";
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new PdfNavigation());
+    // パスワードの設定
+    if (passwords[pdfFiles[currentIndex]]) {
+        passwordInput.style.display = "inline";
+        passwordInput.value = "";
+        nextBtn.disabled = true;
+    } else {
+        passwordInput.style.display = "none";
+        nextBtn.disabled = false;
+    }
+
+    // 「戻る」ボタンの有効・無効化
+    document.getElementById("prevBtn").disabled = (currentIndex === 0);
+
+    // **ページを一番上から表示**
+    setTimeout(() => {
+        window.scrollTo(0, 0);
+    }, 100);
+}
+
+function nextStep() {
+    if (currentIndex < pdfFiles.length - 1) {
+        currentIndex++;
+        updateViewer();
     }
 }
+
+function prevStep() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        updateViewer();
+    }
+}
+
+function checkPassword() {
+    const passwordInput = document.getElementById("passwordInput").value;
+    const currentPdf = pdfFiles[currentIndex];
+
+    if (passwords[currentPdf] && passwordInput === passwords[currentPdf]) {
+        document.getElementById("nextBtn").disabled = false;
+    } else {
+        document.getElementById("nextBtn").disabled = true;
+    }
+}
+
+// 初期表示の設定
+updateViewer();
