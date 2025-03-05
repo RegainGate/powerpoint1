@@ -1,72 +1,141 @@
-/* ベーススタイル */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-/* body全体 */
 body {
-  font-family: sans-serif;
-  background-color: #fdfdfd;
-  color: #333;
-  margin: 0;
-  padding: 0;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* PCでスクロールを防ぐ */
 }
 
-/* ヘッダー */
-header {
-  text-align: center;
-  padding: 1rem;
-  background-color: #eee;
+h2 {
+    margin-top: 15px;
+    font-size: 20px;
+    color: #333;
+    text-align: center;
+    width: 100%;
 }
 
-/* PDF表示領域 */
-.pdf-container {
-  width: 100%;
-  height: calc(100vh - 200px); /* 画面の高さからヘッダー等ボタン領域分を差し引き */
-  overflow: hidden;
-  position: relative;
+/* PDFビューア */
+#viewer {
+    width: 100vw;
+    height: 85vh; /* PCでは画面高の85%を使用 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* ボタンエリア */
-.button-area {
-  text-align: center;
-  margin: 1rem 0;
+/* PDFを全画面に表示 */
+object {
+    width: 100%;
+    height: 85vh;
+    border: none;
 }
 
-.button-area button {
-  margin: 0 1rem;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  border: 1px solid #aaa;
-  background: #f7f7f7;
-  font-size: 1rem;
-  transition: background 0.3s;
+/* 操作ボタン（戻る・次へ） */
+.controls {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    text-align: center;
 }
 
-.button-area button:hover {
-  background: #ddd;
+button {
+    padding: 10px 15px;
+    font-size: 16px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
 }
 
-/* ヒントなど目立たせないためのクラス */
-.hidden-hint {
-  font-size: 0.75rem; 
-  color: #999;
-  text-align: center;
-  margin-top: 2rem;
+button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
 }
 
-/* スマホ対応(幅600px以下のとき) */
-@media screen and (max-width: 600px) {
-  header {
-    font-size: 0.9rem;
-  }
-  .pdf-container {
-    height: calc(100vh - 180px);
-  }
-  .button-area button {
-    font-size: 0.9rem;
-    margin: 0.5rem 0.5rem;
-  }
+input[type="password"] {
+    width: 100px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    background-color: white;
+    color: black;
+}
+
+/* 「PDFを直接開く」リンクの位置を調整 */
+.pdf-link {
+    position: absolute;
+    bottom: 50px;
+    width: 100%;
+    text-align: center;
+}
+
+.pdf-link a {
+    font-size: 16px;
+    text-decoration: none;
+    color: #007bff;
+}
+
+/* 「暗号を見る」ボタンの位置調整 */
+.hint-container {
+    position: absolute;
+    /* PC用 */
+    bottom: 130px; 
+    width: 100%;
+    text-align: center;
+}
+
+.hint-container button {
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.hint-container span {
+    margin-left: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* ▼ スマホ表示時の調整 ▼ */
+@media screen and (max-width: 768px) {
+    #viewer {
+        height: 75vh; /* スマホでは少し小さめに */
+    }
+    
+    object {
+        width: 90%; /* スマホでは幅を少し縮小 */
+        height: 75vh; 
+    }
+
+    .controls {
+        bottom: 5px;
+        padding: 5px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    input[type="password"] {
+        font-size: 14px;
+        padding: 5px;
+        width: 80px;
+    }
+
+    /* スマホで「暗号を見る」ボタンが被らないように余裕を持たせる */
+    .hint-container {
+        bottom: 200px;
+    }
 }
