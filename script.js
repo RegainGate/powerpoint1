@@ -16,9 +16,9 @@ const passwords = {
 };
 
 const hints = {
-    "ステップ1-2.pdf": "ADMJ",
-    "ステップ1-4.pdf": "OSOI",
-    "ステップ1-5.pdf": "CAFUNE"
+    "ステップ1-3.pdf": "ADMJ",
+    "ステップ1-5.pdf": "OSOI",
+    "ステップ1-6.pdf": "CAFUNE"
 };
 
 let currentIndex = 0;
