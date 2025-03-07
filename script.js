@@ -16,8 +16,8 @@ const passwords = {
 
 const hints = {
     "ステップ1-2.pdf": "ADMJ",
-    "ステップ2-2.pdf": "OSOI",
-    "ステップ1-2.pdf": "CAFUNE"
+    "ステップ1-4.pdf": "OSOI",
+    "ステップ1-5.pdf": "CAFUNE"
 };
 
 let currentIndex = 0;
